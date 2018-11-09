@@ -20,8 +20,8 @@ Reference:
 
 ## Parameters
 
-All parameters can be modified in `Makefile`. You may want to edit `DATASET` and `FEATURE_TYPE` to test all combinations of each dataset and each feature type.
-Another parameter `truncation_size` is set to 1000 by default, for large datasets like Oxford105k and Paris106k, change it to 5000 will improve the performance.
+All parameters can be modified in `Makefile`. You may want to edit [DATASET](https://github.com/fyang93/diffusion/blob/master/Makefile#L6) and [FEATURE_TYPE](https://github.com/fyang93/diffusion/blob/master/Makefile#L8) to test all combinations of each dataset and each feature type.
+Another parameter [truncation_size](https://github.com/fyang93/diffusion/blob/master/Makefile#L18) is set to 1000 by default, for large datasets like Oxford105k and Paris106k, changing it to 5000 will improve the performance.
 
 ## Run
 
