@@ -11,10 +11,12 @@ Reference:
 
 ## Requirements
 
-Facebook [FAISS](https://github.com/facebookresearch/faiss) is used to build kNN graph.
-Install faiss-cpu or faiss-gpu according to your situation.
-You may also need joblib to run multiple processes in parallel.
-You can install joblib with `pip` or `conda`.
+- Install Facebook [FAISS](https://github.com/facebookresearch/faiss) by running `conda install faiss-cpu -c pytorch`
+> Optional: install the faiss-gpu under the [instruction](https://github.com/facebookresearch/faiss/blob/master/INSTALL.md) according to your CUDA version
+
+- Install joblib by running `conda install joblib`
+
+- Install tqdm by running `conda install tqdm`
 
 ## Run
 
@@ -25,7 +27,8 @@ You can install joblib with `pip` or `conda`.
 - Run `make rank` to get the results. If you have GPUs, try using commands like `CUDA_VISIBLE_DEVICES=0,1 make rank`, `0,1` are examples of GPU ids.
 > Note: on Oxford5k and Paris6k datasets, the `truncation_size` parameter should be no larger than 1024 when using GPUs according to FAISS's limitation. You can use CPUs instead.
 
-## Author
+## Authors
 
-- [Fan Yang](https://fyang.me/about)
+- [Fan Yang](https://fyang.me/about) wrote the algorithm
+- [Ryota Hinami](http://www.satoh-lab.nii.ac.jp/member/hinami/) wrote the evaluator
 
