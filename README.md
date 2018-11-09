@@ -18,6 +18,11 @@ Reference:
 
 - Install tqdm by running `conda install tqdm`
 
+## Parameters
+
+All parameters can be modified in `Makefile`. You may want to edit `DATASET` and `FEATURE_TYPE` to test all combinations of each dataset and each feature type.
+Another parameter `truncation_size` is set to 1000 by default, for large datasets like Oxford105k and Paris106k, change it to 5000 will improve the performance.
+
 ## Run
 
 - Run `make download` to download files needed in experiments;
