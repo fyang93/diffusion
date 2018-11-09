@@ -11,10 +11,7 @@ from tqdm import tqdm
 
 
 class BaseKNN(object):
-    """KNN base class
-        database: feature vectors in database
-        method: distance matric
-    """
+    """KNN base class"""
     def __init__(self, database, method):
         if database.dtype != np.float32:
             database = database.astype(np.float32)
@@ -52,8 +49,8 @@ class BaseKNN(object):
 class KNN(BaseKNN):
     """KNN class
     Args:
-        database: vectors in database to be queired
-        method: method to measure distance between vectors
+        database: feature vectors in database
+        method: distance metric
     """
     def __init__(self, database, method):
         super().__init__(database, method)
@@ -65,6 +62,11 @@ class KNN(BaseKNN):
 
 
 class ANN(BaseKNN):
+    """Approximate nearest neighbor search class
+    Args:
+        database: feature vectors in database
+        method: distance metric
+    """
     def __init__(self, database, method, M=128, nbits=8, nlist=316, nprobe=32):
         super().__init__(database, method)
         self.quantizer = {'cosine': faiss.IndexFlatIP,
