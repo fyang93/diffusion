@@ -3,14 +3,15 @@ import numpy as np
 
 
 class OxfordParisEvaluator:
-    """ Evaluate oxford/paris using official metric """
-    def __init__(self, groundtruth):
-        self._anno_data = sio.loadmat(groundtruth)
+    """ Evaluate oxford/paris using official metric
+    This code follows MATLAB implementation in https://github.com/ahmetius/diffusion-retrieval/blob/master/compute_map.m
+    """
+    def __init__(self, gt_path):
+        self._anno_data = sio.loadmat(gt_path)
 
     def evaluate(self, all_ranks):
         aps = []
-        nq = len(all_ranks)
-        for i in range(nq):
+        for i in range(len(all_ranks)):
             gts_ok, gts_junk = \
                 self._anno_data['gnd'][:,0][i][0][0] - 1, \
                 self._anno_data['gnd'][:,0][i][1][0] - 1
@@ -51,7 +52,6 @@ class OxfordParisEvaluator:
         for j in range(nimgranks):
             rank = ranks[j]
             precision_1 = (j + 1) / (rank + 1);
-            ap = ap + (precision_0 + precision_1) * recall_step / 2.0
+            ap += (precision_0 + precision_1) * recall_step / 2.0
             precision_0 = precision_1
         return ap
-
