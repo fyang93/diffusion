@@ -125,7 +125,7 @@ class Diffusion(object):
         sims = sims ** gamma
         # vec_ids: feature vectors' ids
         # mut_ids: mutual (reciprocal) nearest neighbors' ids
-        # mut_sims: simialrites between feature vectors and mutual nearest neighbors
+        # mut_sims: similarites between feature vectors and their mutual nearest neighbors
         vec_ids, mut_ids, mut_sims = [], [], []
         for i in range(num):
             # check reciprocity: i is in j's kNN and j is in i's kNN

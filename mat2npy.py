@@ -39,7 +39,7 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    input_file = os.path.join('{}_{}.mat'.format(args.dataset_name, args.feature_type))
+    input_file = '{}_{}.mat'.format(args.dataset_name, args.feature_type)
     glob_output_file = '{}_{}_glob.npy'.format(args.dataset_name, args.feature_type)
     query_dir = os.path.join(args.mat_dir, 'query')
     gallery_dir = os.path.join(args.mat_dir, 'gallery')
