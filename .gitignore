@@ -1,0 +1,18 @@
+# python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info
+*.jbl
+*.npy
+data
+tmp
+
+# matlab
+*.mat
+
+# git
+.git
+

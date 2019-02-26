@@ -131,7 +131,7 @@ class Diffusion(object):
             # check reciprocity: i is in j's kNN and j is in i's kNN
             ismutual = np.isin(ids[ids[i]], i).any(axis=1)
             if ismutual.any():
-                vec_ids.append(i * np.ones(ismutual.sum()))
+                vec_ids.append(i * np.ones(ismutual.sum(), dtype=int))
                 mut_ids.append(ids[i, ismutual])
                 mut_sims.append(sims[i, ismutual])
         vec_ids, mut_ids, mut_sims = map(np.concatenate, [vec_ids, mut_ids, mut_sims])
