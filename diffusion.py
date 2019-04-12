@@ -23,10 +23,7 @@ def get_offline_result(i):
     ids = trunc_ids[i]
     trunc_lap = lap_alpha[ids][:, ids]
     scores, _ = linalg.cg(trunc_lap, trunc_init, tol=1e-6, maxiter=20)
-    ranks = np.argsort(-scores)
-    scores = scores[ranks]
-    ranks = ids[ranks]
-    return scores, ranks
+    return scores
 
 
 def cache(filename):
@@ -86,11 +83,11 @@ class Diffusion(object):
         results = Parallel(n_jobs=-1, prefer='threads')(delayed(get_offline_result)(i)
                                       for i in tqdm(range(self.N),
                                                     desc='[offline] diffusion'))
-        all_scores, all_ranks = map(np.concatenate, zip(*results))
+        all_scores = np.concatenate(results)
 
         print('[offline] 3) merge offline results')
         rows = np.repeat(np.arange(self.N), n_trunc)
-        offline = sparse.csr_matrix((all_scores, (rows, all_ranks)),
+        offline = sparse.csr_matrix((all_scores, (rows, trunc_ids.reshape(-1))),
                                     shape=(self.N, self.N),
                                     dtype=np.float32)
         return offline
