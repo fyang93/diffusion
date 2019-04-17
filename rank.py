@@ -6,19 +6,33 @@
 import os
 import time
 import argparse
+import pickle
 import numpy as np
 from tqdm import tqdm
 from dataset import Dataset
+from knn import KNN
 from diffusion import Diffusion
-from evaluate import OxfordParisEvaluator
+from sklearn import preprocessing
+from evaluate import compute_map_and_print
 
 
-def search(args, gamma=3):
+def search():
+    n_query = len(queries)
+    diffusion = Diffusion(np.vstack([queries, gallery]), args.cache_dir)
+    offline = diffusion.get_offline_results(args.truncation_size, args.kd)
+    features = preprocessing.normalize(offline, norm="l2", axis=1)
+    scores = features[:n_query] @ features[n_query:].T
+    ranks = np.argsort(-scores.todense())
+    evaluate(ranks)
+
+
+def search_old(gamma=3):
+    diffusion = Diffusion(gallery, args.cache_dir)
     offline = diffusion.get_offline_results(args.truncation_size, args.kd)
 
     time0 = time.time()
     print('[search] 1) k-NN search')
-    sims, ids = diffusion.knn.search(dataset.queries, args.kq)
+    sims, ids = diffusion.knn.search(queries, args.kq)
     sims = sims ** gamma
     qr_num = ids.shape[0]
 
@@ -37,10 +51,11 @@ def search(args, gamma=3):
     evaluate(all_ranks)
 
 
-def evaluate(all_ranks):
-    if args.ground_truth_path:
-        mAP = evaluator.evaluate(all_ranks=all_ranks)
-        print('mAP = {:.3f}'.format(mAP))
+def evaluate(ranks):
+    gnd_name = os.path.splitext(os.path.basename(args.gnd_path))[0]
+    with open(args.gnd_path, 'rb') as f:
+        gnd = pickle.load(f)['gnd']
+    compute_map_and_print(gnd_name.split("_")[-1], ranks.T, gnd)
 
 
 def parse_args():
@@ -69,7 +84,7 @@ def parse_args():
                         help="""
                         Path to gallery features
                         """)
-    parser.add_argument('--ground_truth_path',
+    parser.add_argument('--gnd_path',
                         type=str,
                         help="""
                         Path to ground-truth
@@ -89,9 +104,7 @@ if __name__ == "__main__":
     args = parse_args()
     if not os.path.isdir(args.cache_dir):
         os.makedirs(args.cache_dir)
-    if args.ground_truth_path:
-        evaluator = OxfordParisEvaluator(args.ground_truth_path)
     dataset = Dataset(args.query_path, args.gallery_path)
-    diffusion = Diffusion(dataset.gallery, args.cache_dir)
-    search(args)
+    queries, gallery = dataset.queries, dataset.gallery
+    search()
 

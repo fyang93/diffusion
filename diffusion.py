@@ -61,7 +61,7 @@ class Diffusion(object):
             self.ann = ANN(self.features, method='cosine')
         self.knn = KNN(self.features, method='cosine')
 
-    # @cache('offline.jbl')
+    @cache('offline.jbl')
     def get_offline_results(self, n_trunc, kd=50):
         """Get offline diffusion results for each gallery feature
         """

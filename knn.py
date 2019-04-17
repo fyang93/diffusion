@@ -67,12 +67,12 @@ class ANN(BaseKNN):
         database: feature vectors in database
         method: distance metric
     """
-    def __init__(self, database, method, M=128, nbits=8, nlist=316, nprobe=32):
+    def __init__(self, database, method, M=128, nbits=8, nlist=316, nprobe=64):
         super().__init__(database, method)
         self.quantizer = {'cosine': faiss.IndexFlatIP,
                           'euclidean': faiss.IndexFlatL2}[method](self.D)
         self.index = faiss.IndexIVFPQ(self.quantizer, self.D, nlist, M, nbits)
-        samples = database[np.random.permutation(np.arange(self.N))[:self.N]]
+        samples = database[np.random.permutation(np.arange(self.N))[:self.N // 5]]
         print("[ANN] train")
         self.index.train(samples)
         self.add()
