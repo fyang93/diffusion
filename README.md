@@ -34,6 +34,11 @@ Another parameter [truncation_size](https://github.com/fyang93/diffusion/blob/ma
 - Run `make rank` to get the results. If you have GPUs, try using commands like `CUDA_VISIBLE_DEVICES=0,1 make rank`, `0,1` are examples of GPU ids.
 > Note: on Oxford5k and Paris6k datasets, the `truncation_size` parameter should be no larger than 1024 when using GPUs according to FAISS's limitation. You can use CPUs instead.
 
+## Updates!!
+
+- We changed the evaluation protocol to the official one. Our previous evaluation code had issues on computing the precision for the first true positive result, which causes the mAP slightly higher than its real value. Since all results in the paper were obtained by the previous evaluation, the comparison is still solid.
+- We provide a new retrieval method that uses all queries at once which produces better performance. If you want to use the algorithm described in the paper, please check `search_old` in `rank.py`.
+
 ## Authors
 
 - [Fan Yang](https://fyang.me/about) wrote the algorithm
