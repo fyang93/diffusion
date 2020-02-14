@@ -125,8 +125,9 @@ class Diffusion(object):
         # mut_sims: similarites between feature vectors and their mutual nearest neighbors
         vec_ids, mut_ids, mut_sims = [], [], []
         for i in range(num):
-            # check reciprocity: i is in j's kNN and j is in i's kNN
+            # check reciprocity: i is in j's kNN and j is in i's kNN when i != j
             ismutual = np.isin(ids[ids[i]], i).any(axis=1)
+            ismutual[0] = False
             if ismutual.any():
                 vec_ids.append(i * np.ones(ismutual.sum(), dtype=int))
                 mut_ids.append(ids[i, ismutual])
@@ -134,5 +135,4 @@ class Diffusion(object):
         vec_ids, mut_ids, mut_sims = map(np.concatenate, [vec_ids, mut_ids, mut_sims])
         affinity = sparse.csc_matrix((mut_sims, (vec_ids, mut_ids)),
                                      shape=(num, num), dtype=np.float32)
-        affinity[range(num), range(num)] = 0
         return affinity
